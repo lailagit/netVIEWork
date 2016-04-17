@@ -1,0 +1,33 @@
+#map 
+{ 
+height: 780px;
+width:880px; 
+margin-left:15px;
+float :left;
+margin-top:15px;
+}
+.navbar{
+    background-color:# 231F20;
+    border-color: # 231F20;
+	height:15px;
+}
+.navbar-brand
+{
+	color:white;
+}
+#user{
+	margin-top:10px;
+}
+
+#scroll{
+margin-top:15px;
+margin-right:20px;
+overflow-y:scroll; 
+overflow-x:scroll; 
+height:200px !important;
+width:150px !important;
+float :right; 
+}
+body{
+height:100%;
+}
