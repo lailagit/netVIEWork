@@ -1,16 +1,12 @@
 
 window.onload= function() {
-	var reseau;
+	var reseau_p;
+	var s_reseau1;
+	var s_reseau2;
 var map = L.map("map", {
         center: new L.LatLng(49.1811, -0.3712),
         zoom: 15
 });
-
-var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-                var osmAttrib='Map data de OpenStreetMap';
-                var osm = new L.TileLayer(osmUrl, {minZoom: 2, maxZoom: 45, attribution: osmAttrib});           
-                // on centre sur la France
-              // map.addLayer(osm);
 
 
 function geopUrl (key, layer, format)
@@ -35,56 +31,72 @@ var carte=L.tileLayer ( geopUrl('7ytqc987zmmjr5g5r3gs1r7p',"GEOGRAPHICALGRIDSYST
 		var baseLayers = {
 			"fond de carte": carte,
 			"orthophoto": ortho,
-			"osm":osm,
             'sans fond': L.tileLayer(''),
 		};
 
 
+		var controlLayers =L.control.layers(baseLayers).addTo(map);
 
-		L.control.layers(baseLayers).addTo(map);
-	
-
-		var reseau;
-     $.getJSON("donnes/Reseau-principal1.geojson",function(data){
+						  			  
+			 var layer=$.getJSON("donnes/Reseau_principal.geojson",function(data){
 				// add GeoJSON layer to the map once the file is loaded
-				 var reseau=L.geoJson(data,{
+				reseau_p=L.geoJson(data,{
 					style : {
-					stroke : false,
-					fillColor: 'red',
-					fillOpacity : 1,
+					"color": "#ff7800",
+                    "weight": 5,
+                    "opacity": 0.65
 					
+
 				},
 					onEachFeature: function( feature, layer ){
-						layer.bindPopup( "test: "+feature.properties.lib_treg+ "<br>id :"+ feature.properties.objectid)
-					}
-									
-				}).addTo(map);
-		
-       map.fitBounds(reseau.getBounds());
+					layer.bindPopup( "Matériel: "+feature.properties.MATERIAU+ "<br>Diamètre:"+ feature.properties.DIAMETRE)
 			
-			  });
-			  
-			  
-			  
-			  
-			  $.getJSON("test_conversion.geojson",function(data){
-				// add GeoJSON layer to the map once the file is loaded
-				var test=L.geoJson(data,{
-					style : {
-					stroke : false,
-					fillColor: 'red',
-					fillOpacity : 1,
-					
-
-				},
-					onEachFeature: function( feature, layer ){
-						layer.bindPopup( "test: "+feature.properties.lib_treg+ "<br>id :"+ feature.properties.objectid)
 					}
 				})
-				test.addTo(map);
-	         // map.fitBounds(test.getBounds());
+			map.fitBounds(reseau_p.getBounds());
+			controlLayers.addOverlay(reseau_p, 'Réseau principal');
+			
 			  });
 			
+			  
+			 $.getJSON("donnes/Sous_reseau1.geojson",function(data){
+				// add GeoJSON layer to the map once the file is loaded
+				s_reseau1=L.geoJson(data,{
+					style : {
+					"color": "blue",
+                    "weight": 5,
+                    "opacity": 0.65
+					
+
+				},
+					onEachFeature: function( feature, layer ){
+                     layer.bindPopup( "Location: "+feature.properties.location+ "<br>Matériel:"+ feature.properties.material+ "<br>Diamètre:"+ feature.properties.diameter+ "<br>Qualité:"+ feature.properties.Qualite)					
+					 }
+				})
+			   
+			   controlLayers.addOverlay(s_reseau1, 'Sous réseau1');
+	       
+			  });
+			  $.getJSON("donnes/Sous_reseau2.geojson",function(data){
+				// add GeoJSON layer to the map once the file is loaded
+				 s_reseau2=L.geoJson(data,{
+					style : {
+					"color": "green",
+                    "weight": 5,
+                    "opacity": 0.65
+					
+
+				},
+					onEachFeature: function( feature, layer ){
+                     layer.bindPopup( "Location: "+feature.properties.location+ "<br>Matériel:"+ feature.properties.material+ "<br>Diamètre:"+ feature.properties.diameter+ "<br>Qualité:"+ feature.properties.Qualite)					
+					 }
+				})
+			 
+			 controlLayers.addOverlay(s_reseau2, 'Sous réseau2');
+			 
+	       
+			  });
+              
 }
 
 
