@@ -5,9 +5,13 @@ window.onload= function() {
 	var s_reseau2;
 var map = L.map("map", {
         center: new L.LatLng(49.1811, -0.3712),
-        zoom: 15
+		zoom: 15,
+		fullscreenControl: true,//activer le mode plein ecran
+		fullscreenControlOptions: {
+        position: 'topleft'
+        }
+        
 });
-
 
 function geopUrl (key, layer, format)
 {  return "http://wxs.ign.fr/"+ key + "/wmts?LAYER=" + layer
@@ -96,9 +100,8 @@ var carte=L.tileLayer ( geopUrl('7ytqc987zmmjr5g5r3gs1r7p',"GEOGRAPHICALGRIDSYST
 			 
 	       
 			  });
-              
+			  
 }
-
 
 
 
