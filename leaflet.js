@@ -1,8 +1,11 @@
-
+var layer;
+var reseau_p;
+var s_reseau1;
+var s_reseau2;
+var coche=1;
 window.onload= function() {
-	var reseau_p;
-	var s_reseau1;
-	var s_reseau2;
+	
+	
 	var n_layer;
 	var div= L.DomUtil.create('div', 'info legend');
 	
@@ -45,11 +48,11 @@ var carte=L.tileLayer ( geopUrl('7ytqc987zmmjr5g5r3gs1r7p',"GEOGRAPHICALGRIDSYST
 		var controlLayers =L.control.layers(baseLayers).addTo(map);
 
 					  			  
-			 var layer=$.getJSON("donnes/Reseau_principal.geojson",function(data){
+			  layer=$.getJSON("donnes/Reseau_principal.geojson",function(data){
 				// add GeoJSON layer to the map once the file is loaded
 				reseau_p=L.geoJson(data,{
 					style : {
-					"color": "#ff7800",
+					"color": "black",
                     "weight": 5,
                     "opacity": 0.65
 					
@@ -168,8 +171,79 @@ div.removeChild(sr2);
 	  
 
 }
+function getdiametre(d) {
+	if(d <200) return 3;
+	else return 12;
+         
+}
+function getcolor(d) {
+	if(d <200) return 'blue';
+	else return 'red';
+         
+}
 
+//affichage dynamique selon le diamètre
+function affichage_dynamique(ev){
+	
+	if(coche==1){
+reseau_p.eachLayer(function(reseau_p) {
+        diametreValue = reseau_p.feature.properties.DIAMETRE;
 
+        var diametre = getdiametre(diametreValue);
+		
+
+        reseau_p.setStyle({
+            
+            weight: diametre
+			
+        });
+    });
+reseau_p.eachLayer(function(s_reseau1) {
+        diametreValue = s_reseau1.feature.properties.DIAMETRE;
+
+        var diametre = getdiametre(diametreValue);
+		
+
+        s_reseau1.setStyle({
+            
+            weight: diametre
+			
+        });
+    });
+s_reseau2.eachLayer(function(s_reseau2) {
+        diametreValue = s_reseau2.feature.properties.DIAMETRE;
+
+        var diametre = getdiametre(diametreValue);
+		
+
+        s_reseau2.setStyle({
+            
+            weight: diametre
+			
+        });
+    });
+	}
+	else{
+		reseau_p.setStyle({
+            
+            weight: 5
+			
+        });
+		 s_reseau1.setStyle({
+            
+            weight: 5
+			
+        });
+		 s_reseau2.setStyle({
+            
+            weight: 5
+			
+        });
+		
+	}
+	coche=0;
+	
+}
 
 
 
