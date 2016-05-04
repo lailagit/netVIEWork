@@ -10,10 +10,13 @@ var s_reseau1;
 var s_reseau2;
 var coche_d = 1;
 var coche_q = 1;
+//déclaration de la légende
+var div = L.DomUtil.create('div', 'info legend'); 
+var legend;
 window.onload = function() { //au chargement de la page
 
     var n_layer;
-    var div = L.DomUtil.create('div', 'info legend'); //dclaration de la légende
+    
 
     var map = L.map("map", { //délclaration de la carte 
         center: new L.LatLng(49.1811, -0.3712),
@@ -62,7 +65,7 @@ window.onload = function() { //au chargement de la page
         reseau_p = L.geoJson(data, {
             style: {
                 "color": "black",
-                "weight": 5,
+                "weight": 2,
                 "opacity": 1
 
 
@@ -83,7 +86,7 @@ window.onload = function() { //au chargement de la page
         s_reseau1 = L.geoJson(data, {
             style: {
                 "color": "blue",
-                "weight": 5,
+                "weight": 2,
                 "opacity": 1
 
 
@@ -100,9 +103,12 @@ window.onload = function() { //au chargement de la page
         // add GeoJSON layer to the map once the file is loaded
         s_reseau2 = L.geoJson(data, {
             style: {
-                "color": "green",
-                "weight": 5,
-                "opacity": 1,
+                weight: 2,
+				opacity: 1,
+				color: 'green',
+				
+				
+				
 			
 
 
@@ -122,29 +128,27 @@ window.onload = function() { //au chargement de la page
 
     //ajouter la legende
 
-    var legend = L.control({
+    legend = L.control({
         position: 'bottomright'
     });
+	div.innerHTML += '<div>' + '<span id="titre_l">Légende</span><br></div>'; 
 
     legend.onAdd = function(map) {
-
-        // loop through our density intervals and generate a label with a colored square for each interval
+		
         if (n_layer == 1) {
-            div.innerHTML += '<div id="rp"><i style="background:' + '#ff7800' + '"></i> ' + 'réseau principal<br></div>';
+            div.innerHTML += '<div id="rp"><i style="background:' + 'black' + '"></i> ' + 'réseau principal<br></div>';
         } else if (n_layer == 2) {
-            div.innerHTML += '<div id="sr1"><i style="background:' + 'blue' + '"></i> ' + 'sous réseau1<br>';
-        } else div.innerHTML += '<div id="sr2"><i  style="background:' + 'green' + '"></i> ' + 'sous réseau2<br>';
-
-
+            div.innerHTML += '<div id="sr1"><i style="background:' + 'blue' + '"></i> ' + 'sous réseau1<br></div>';
+        } else if(n_layer == 3) div.innerHTML += '<div id="sr2"><i  style="background:' + 'green' + '"></i> ' + 'sous réseau2<br></div>';
 
         return div;
     };
 
-    //legend.addTo(map);
-
+    
+     div.style.display = "block";
 
     map.on('overlayadd', function(eventLayer) {
-		div.style.display = "block";
+		
 
         if (eventLayer.name === 'Réseau principal') {
 
@@ -185,16 +189,15 @@ window.onload = function() { //au chargement de la page
 }
 
 function getdiametre(d) {
-    if (d < 200) return 3;
-    else return 12;
+    if (d < 200) return 2;
+    else return 5;
 
 }
 
-function getopacity(q) {
-	console.log(q);
-    if (q=="Bonne") return 1;
+function getdash(q) {
+    if (q=="Bonne") return '';
 	
-    else return 0.3;
+    else return '3';
 
 }
 
@@ -238,25 +241,37 @@ function affichage_dynamique_diam(ev) {
 
             });
         });
+		coche_d = 0;
+		div.innerHTML += '<div id="diam_l1">' + '<br><span id="titre">Diamètre</span><br></div>'; 
+		div.innerHTML += '<div id="diam_l2"><i style="background:' + 'black' + '"></i> ' + 'Moins de 0.2m<br></div>';
+		div.innerHTML += '<div id="diam_l3"><i id="diam" style="background:' + 'black' + '"></i>' + 'Plus de 0.2m<br></div>';
     } else {
         reseau_p.setStyle({
 
-            weight: 5
+            weight: 2
 
         });
         s_reseau1.setStyle({
 
-            weight: 5
+            weight: 2
 
         });
         s_reseau2.setStyle({
 
-            weight: 5
+            weight: 2
 
         });
+		coche_d = 1;
+	//enlever les diamètres de la légende
+	var diam_l1 = document.getElementById("diam_l1");
+	var diam_l2 = document.getElementById("diam_l2");
+	var diam_l3 = document.getElementById("diam_l3");
+     div.removeChild(diam_l1);
+	 div.removeChild(diam_l2);
+	 div.removeChild(diam_l3)
 
     }
-    coche_d = 0;
+    
 
 }
 //affichage dynamique selon la qualité
@@ -266,12 +281,12 @@ function affichage_dynamique_qual(ev) {
         s_reseau1.eachLayer(function(s_reseau1) {
             qualiteValue = s_reseau1.feature.properties.Qualite;
 
-            var opacity = getopacity(qualiteValue);
+            var dash = getdash(qualiteValue);
 
-console.log(opacity);
+
             s_reseau1.setStyle({
 
-                opacity: opacity
+                dashArray: dash
 
             });
         });
@@ -279,29 +294,41 @@ console.log(opacity);
         s_reseau2.eachLayer(function(s_reseau2) {
             qualiteValue = s_reseau2.feature.properties.Qualite;
 
-            var opacity = getopacity(qualiteValue);
+            var dash = getdash(qualiteValue);
 
             s_reseau2.setStyle({
 
-                opacity: opacity
+                dashArray: dash
 
             });
         });
+		 coche_q = 0;
+	 
+		div.innerHTML += '<div id="qual_l1">' + '<br><span id="titre">Niveau de qualité</span><br></div>'; 
+		div.innerHTML += '<div id="qual_l2"><i style="background:' + 'black' + '"></i> ' + 'Bonne<br></div>';
+		div.innerHTML += '<div id="qual_l3"><i id="dash"></i> ' + 'Avec défaut<br></div>';
     } else {
        
         s_reseau1.setStyle({
 
-            opacity: 1
+            dashArray: ''
 
         });
         s_reseau2.setStyle({
 
-            opacity: 1
+            dashArray: ''
 
         });
-
-    }
-    coche_q = 0;
+        coche_q = 1;
+	//enlever les diamètres de la légende
+	var qual_l1 = document.getElementById("qual_l1");
+	var qual_l2 = document.getElementById("qual_l2");
+	var qual_l3 = document.getElementById("qual_l3");
+    div.removeChild(qual_l1);
+	 div.removeChild(qual_l2);
+	 div.removeChild(qual_l3);
+	
+}
 }
 
 

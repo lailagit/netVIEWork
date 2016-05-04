@@ -52,5 +52,31 @@ height:100%;
 			float: left;
 			margin-right: 8px;
 			margin-top: 8px;
+			opacity: 0.7;		
+		}
+		#dash{
+			width: 18px;
+			height: 3px;
+			float: left;
+			margin-right: 8px;
+			margin-top: 8px;
 			opacity: 0.7;
+			border-style:dotted;
+			border-color:black;
+			border-width:3px;
+			
+		}
+		#titre{
+			font-weight:bold;
+		}
+		#titre_l{
+			margin-left: 20px;
+			font-weight:bold;
+			font-size:18px;
+			text-align;center;
+			
+		}
+		#diam{
+			height: 5px;
+			
 		}
