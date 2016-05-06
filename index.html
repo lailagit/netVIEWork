@@ -42,46 +42,18 @@
 	 
      <div id="map"></div>
 	 <div id="images">
-	  <div id="scroll">
-	   <ul>
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another&nbsp;action</a></li>
-                    <li><a href="#">Something&nbsp;else&nbsp;here</a></li>
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another&nbsp;action</a></li>
-                    <li><a href="#">Something&nbsp;else&nbsp;here</a></li>
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another&nbsp;action</a></li>
-                    <li><a href="#">Something&nbsp;else&nbsp;here</a></li>
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another&nbsp;action</a></li>
-                    <li><a href="#">Something&nbsp;else&nbsp;here</a></li>
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another&nbsp;action</a></li>
-					 <li><a href="#">Action</a></li>
-                    <li><a href="#">Anotheraction</a></li>
-                    <li><a href="#">Something&nbsp;else&nbsp;here</a></li>
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another&nbsp;action</a></li>
-                    <li><a href="#">Something&nbsp;else&nbsp;here</a></li>
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another&nbsp;action</a></li>
-                    <li><a href="#">Something&nbsp;else&nbsp;here</a></li>
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another&nbsp;action</a></li>
-                    <li><a href="#">Something&nbsp;else&nbsp;here</a></li>
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another&nbsp;action</a></li>
-                </ul>
-
-	  
-	  </div>
+	  <div class="checkbox">
+  <label><input type="checkbox" value=""onclick="affichage_dynamique_qual(event)">Qualité</label>
+</div>
+<div class="info legend" id="leg_qual"></div><br>
 	  <div class="checkbox">
   <label><input type="checkbox" value=""onclick="affichage_dynamique_diam(event)">Diamètre</label>
 </div>
-  <div class="checkbox">
-  <label><input type="checkbox" value=""onclick="affichage_dynamique_qual(event)">Qualité</label>
-</div>
+<div class="info legend" id="leg_diam"></div><br>
+
+
+<button class="btn btn-success">Exporter la carte</button><br><br>
+<button class="btn btn-success">quitter</button>
     <!-- Footer -->
     <footer>
         <div class="container">
