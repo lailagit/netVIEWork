@@ -11,6 +11,8 @@ var s_reseau2;
 var ancien_layer;
 var coche_d = 1;
 var coche_q = 1;
+var val_diam = [];
+var premiere=true;
 //déclaration de la légende
 var div = L.DomUtil.create('div', 'info legend'); 
 var legend;
@@ -19,9 +21,11 @@ window.onload = function() { //au chargement de la page
 document.getElementById('leg_diam').style.display="none";
 document.getElementById('leg_qual').style.display="none";	 
 //définir la légende de qualité
-document.getElementById('leg_qual').innerHTML += '<div id="qual_l1">' + '<br><span id="titre">Niveau de qualité</span><br></div>'; 
-document.getElementById('leg_qual').innerHTML += '<div id="qual_l2"><i style="background:' + 'black' + '"></i> ' + 'Bonne<br></div>';
-document.getElementById('leg_qual').innerHTML += '<div id="qual_l3"><i id="dash"></i> ' + 'Avec défaut<br></div>';
+document.getElementById('leg_qual').innerHTML += '<div>' + '<br><span id="titre">Niveau de qualité</span><br></div>'; 
+document.getElementById('leg_qual').innerHTML += '<div><i style="background:' + 'black' + '"></i> ' + 'Bonne<br></div>';
+document.getElementById('leg_qual').innerHTML += '<div><i id="dash"></i> ' + 'Avec défaut<br></div>';
+//définir la légende de qualité
+document.getElementById('leg_diam').innerHTML += '<div id="diam_l1">' + '<br><span id="titre">Diamètre</span><br></div>'; 
     var n_layer;
     
 
@@ -257,7 +261,11 @@ document.getElementById('leg_qual').innerHTML += '<div id="qual_l3"><i id="dash"
 	}
 
 function getdiametre(d) {
-     return d/80;
+	if(!contains.call(val_diam,d)&d!=null&d!=0)
+	{
+		val_diam.push(d);
+	}
+        return d/100;
 
 }
 
@@ -272,8 +280,7 @@ function getdash(q) {
 function affichage_dynamique_diam(ev) {
 
     if (coche_d == 1) {
-		document.getElementById('leg_diam').style.display="block";
-		document.getElementById('leg_diam').innerHTML='testtttttttttt';
+		document.getElementById('leg_diam').style.display="block";	
         reseau_p.eachLayer(function(reseau_p) {
             diametreValue = reseau_p.feature.properties.DIAMETRE;
 
@@ -311,9 +318,18 @@ function affichage_dynamique_diam(ev) {
             });
         });
 		coche_d = 0;
-		div.innerHTML += '<div id="diam_l1">' + '<br><span id="titre">Diamètre</span><br></div>'; 
-		div.innerHTML += '<div id="diam_l2"><i style="background:' + 'black' + '"></i> ' + 'Moins de 0.2m<br></div>';
-		div.innerHTML += '<div id="diam_l3"><i id="diam" style="background:' + 'black' + '"></i>' + 'Plus de 0.2m<br></div>';
+		if(premiere){
+		//trier le tableau des diamètres
+		val_diam.sort(compare);
+		
+		for(var i= 0; i < val_diam.length; i++)
+	{
+		console.log(val_diam[i]);
+		//afficher les diamètres dans la légende
+		 document.getElementById('leg_diam').innerHTML += '<div><i style="background:' + 'black;height:'+val_diam[i]/100+'px'+'"></i> ' + 'Diamètre:'+val_diam[i]+'m<br></div>';
+	}
+		}
+		premiere=false;
     } else {
         reseau_p.setStyle({
 
@@ -331,19 +347,44 @@ function affichage_dynamique_diam(ev) {
 
         });
 		coche_d = 1;
-	//enlever les diamètres de la légende
-	var diam_l1 = document.getElementById("diam_l1");
-	var diam_l2 = document.getElementById("diam_l2");
-	var diam_l3 = document.getElementById("diam_l3");
-     div.removeChild(diam_l1);
-	 div.removeChild(diam_l2);
-	 div.removeChild(diam_l3);
 	 //enlever la legnende 
 	 document.getElementById('leg_diam').style.display="none";
 
     }
     
 
+}
+
+//vérifier si un tableu contient un élément
+var contains = function(needle) {
+    // Per spec, the way to identify NaN is that it is not equal to itself
+    var findNaN = needle !== needle;
+    var indexOf;
+
+    if(!findNaN && typeof Array.prototype.indexOf === 'function') {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function(needle) {
+            var i = -1, index = -1;
+
+            for(i = 0; i < this.length; i++) {
+                var item = this[i];
+
+                if((findNaN && item !== item) || item === needle) {
+                    index = i;
+                    break;
+                }
+            }
+
+            return index;
+        };
+    }
+
+    return indexOf.call(this, needle) > -1;
+};
+//fonction utilisé pour le tri 
+	function compare(x, y) {
+    return x - y;
 }
 //affichage dynamique selon la qualité
 function affichage_dynamique_qual(ev) {
