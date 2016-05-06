@@ -27,6 +27,7 @@ window.onload = function() { //au chargement de la page
         }
 
     });
+
     //fonction de chargement des données du géoportail
     //key:la clé développement du géoportail
     //format:le format du résultat fourni
@@ -57,14 +58,35 @@ window.onload = function() { //au chargement de la page
     };
 
     //définir les couches de bases
+	
     var controlLayers = L.control.layers(baseLayers).addTo(map);
+     
+//ajouter la legende
+
+    legend = L.control({
+        position: 'bottomright'
+    });
+	legend.onAdd = function(map) {
+		div.innerHTML += '<div>' + '<span id="titre_l">Légende</span><br></div>'; 
+		/*
+        if (n_layer == 1) {
+			reseau_p.bringToBack();
+            div.innerHTML += '<div id="rp"><i style="background:' + '#FFA500' + '"></i> ' + 'réseau principal<br></div>';
+        } else if (n_layer == 2) {
+            div.innerHTML += '<div id="sr1"><i style="background:' + 'blue' + '"></i> ' + 'sous réseau1<br></div>';
+        } else if(n_layer == 3) div.innerHTML += '<div id="sr2"><i  style="background:' + 'green' + '"></i> ' + 'sous réseau2<br></div>';
+*/
+        return div;
+    };
+	div.style.display = "block";
+	legend.addTo(map);
 
 
     layer = $.getJSON("donnes/Reseau_principal.geojson", function(data) {
         // add GeoJSON layer to the map once the file is loaded
         reseau_p = L.geoJson(data, {
             style: {
-                "color": "black",
+                "color": "#FFA500",
                 "weight": 2,
                 "opacity": 1
 
@@ -76,7 +98,9 @@ window.onload = function() { //au chargement de la page
             }
         })
         map.fitBounds(reseau_p.getBounds());
-        controlLayers.addOverlay(reseau_p, 'Réseau principal');
+         //LayerControlServices.addOverlay(reseau_p, 'Réseau principal');
+		div.innerHTML += '<div id="rp"><input type="checkbox" value=""onclick="activer(event,reseau_p )"><i style="background:' + '#FFA500' + '"></i> ' + 'réseau principal<br></div>';
+		
 
     });
 
@@ -92,11 +116,12 @@ window.onload = function() { //au chargement de la page
 
             },
             onEachFeature: function(feature, layer) {
-                layer.bindPopup(feature.properties.location + "<br>Matériel:" + feature.properties.material + "<br>Diamètre:" + feature.properties.diameter + "<br>Qualité:" + feature.properties.Qualite)
+             layer.bindPopup(feature.properties.location + "<br>Matériel:" + feature.properties.material + "<br>Diamètre:" + feature.properties.diameter + "<br>Qualité:" + feature.properties.Qualite)
             }
         })
 
-        controlLayers.addOverlay(s_reseau1, 'Sous réseau1');
+         //LayerControlServices.addOverlay(s_reseau1, 'Sous réseau1');
+		 div.innerHTML += '<div id="sr1"><input type="checkbox" value=""onclick="activer(event,s_reseau1 )"><i style="background:' + 'blue' + '"></i> ' + 'sous réseau1<br></div>';
 
     });
     $.getJSON("donnes/Sous_reseau2.geojson", function(data) {
@@ -107,46 +132,35 @@ window.onload = function() { //au chargement de la page
 				opacity: 1,
 				color: 'green',
 				
-				
-				
-			
-
-
             },
             onEachFeature: function(feature, layer) {
                 layer.bindPopup( feature.properties.location + "<br>Matériel:" + feature.properties.material + "<br>Diamètre:" + feature.properties.diameter + "<br>Qualité:" + feature.properties.Qualite)
             }
         })
 
-        controlLayers.addOverlay(s_reseau2, 'Sous réseau2');
+         //LayerControlServices.addOverlay(s_reseau2, 'Sous réseau2');
+		 div.innerHTML += '<div id="sr2"><input type="checkbox" value=""onclick="activer(event,s_reseau2)"><i  style="background:' + 'green' + '"></i> ' + 'sous réseau2<br></div>';
 
 
     });
+	
 
 
-
-
-    //ajouter la legende
-
-    legend = L.control({
-        position: 'bottomright'
-    });
-	div.innerHTML += '<div>' + '<span id="titre_l">Légende</span><br></div>'; 
-
+/*
     legend.onAdd = function(map) {
 		
         if (n_layer == 1) {
-            div.innerHTML += '<div id="rp"><i style="background:' + 'black' + '"></i> ' + 'réseau principal<br></div>';
+			reseau_p.bringToBack();
+            div.innerHTML += '<div id="rp"><i style="background:' + '#FFA500' + '"></i> ' + 'réseau principal<br></div>';
         } else if (n_layer == 2) {
             div.innerHTML += '<div id="sr1"><i style="background:' + 'blue' + '"></i> ' + 'sous réseau1<br></div>';
         } else if(n_layer == 3) div.innerHTML += '<div id="sr2"><i  style="background:' + 'green' + '"></i> ' + 'sous réseau2<br></div>';
 
         return div;
     };
-
+  */ 
     
-     div.style.display = "block";
-
+/*
     map.on('overlayadd', function(eventLayer) {
 		
 
@@ -183,10 +197,19 @@ window.onload = function() { //au chargement de la page
 		}
     });
 
-
+*/
 
 
 }
+//fonction d'activation des couches
+	
+	function activer(ev,couche) {
+		
+
+       couche.addTo(map);
+  
+		
+	}
 
 function getdiametre(d) {
     if (d < 200) return 2;
