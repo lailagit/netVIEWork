@@ -6,8 +6,7 @@ Autheurs: KAICHOUH-ZAROUGUI-PETIT
 //déclaration des variables globales
 var layer;
 var reseau_p;
-var s_reseau1;
-var s_reseau2;
+var s_reseau=[];
 var ancien_layer;
 var coche_d = 1;
 var coche_q = 1;
@@ -17,6 +16,7 @@ var premiere=true;
 var div = L.DomUtil.create('div', 'info legend'); 
 var legend;
 window.onload = function() { //au chargement de la page
+
 //ne pas afficher la légende du diamètre et de qualité au chargement de la page
 document.getElementById('leg_diam').style.display="none";
 document.getElementById('leg_qual').style.display="none";	 
@@ -91,21 +91,36 @@ document.getElementById('leg_diam').innerHTML += '<div id="diam_l1">' + '<br><sp
     };
 	div.style.display = "block";
 	legend.addTo(map);
+	var xhr = new XMLHttpRequest();
+
+xhr.open("GET","test.php", true);
+//console.log('1');
+xhr.send();
+xhr.addEventListener('readystatechange',  function(e) {
+		if(xhr.readyState == 4 && xhr.status == 200) 
+		{ //console.log('rah la requete kheddamaaa');
+	   b= JSON.parse(xhr.responseText);
+
+	
+	for (var j = 0; j < b.length; j++) {
+
+	(function(j){
+		var result = b[j].indexOf('Reseau_principal');
+		if (result == -1) {
+		var chemin = "donnes/" + b[j] + ".geojson";
+
+	   layer = $.getJSON(chemin, function(data) {
+		  reseau = L.geoJson(data, {
+			 style: {
+				"color": "blue",
+				"weight": 3,
+				"opacity": 1
+			 },
 
 
-    layer = $.getJSON("donnes/Reseau_principal.geojson", function(data) {
-        // add GeoJSON layer to the map once the file is loaded
-        reseau_p = L.geoJson(data, {
-            style: {
-                "color": "#FFA500",
-                "weight": 3,
-                "opacity": 1
-
-
-            },
-            onEachFeature: function(feature, layer) {
-                layer.bindPopup("Matériel: " + feature.properties.MATERIAU + "<br>Diamètre:" + feature.properties.DIAMETRE)
-				layer.on('mouseover', function() { 
+			 onEachFeature: function(feature, layer) {
+					layer.bindPopup("Location: "+feature.properties.location+ "<br>Matériel:"+ feature.properties.material+ "<br>Diamètre:"+ feature.properties.diameter+ "<br>Qualité:"+ feature.properties.Qualite)
+				 	layer.on('mouseover', function() { 
 			    ancien_layer=layer;
 				layer.openPopup(); 
 				layer.setStyle({
@@ -119,87 +134,59 @@ document.getElementById('leg_diam').innerHTML += '<div id="diam_l1">' + '<br><sp
             });
 				
 	           				});
+				 
+				 
+				 
+				 }
+
+
+			  })
+
+			  controlLayers.addOverlay(reseau, b[j]);
+			  s_reseau.push(reseau);
+		});
+	}else{
 		
-							
-							
+		layer=$.getJSON("donnes/Reseau_principal.geojson",function(data){
+				// add GeoJSON layer to the map once the file is loaded
+				reseau_p=L.geoJson(data,{
+					style : {
+					"color": '#FFA500',
+                    "weight": 3,
+                    "opacity": 1
+					
 
-            }
-        })
-        map.fitBounds(reseau_p.getBounds());
-        controlLayers.addOverlay(reseau_p, 'Réseau principal');
-		//div.innerHTML += '<div id="rp"><input type="checkbox" value=""onclick="activer(event,reseau_p )"><i style="background:' + '#FFA500' + '"></i> ' + 'réseau principal<br></div>';
-		
-
-    });
-
-
-    $.getJSON("donnes/Sous_reseau1.geojson", function(data) {
-        // add GeoJSON layer to the map once the file is loaded
-        s_reseau1 = L.geoJson(data, {
-            style: {
-                "color": "blue",
-                "weight":3,
-                "opacity": 1
-
-
-            },
-            onEachFeature: function(feature, layer) {
-             layer.bindPopup(feature.properties.location + "<br>Matériel:" + feature.properties.material + "<br>Diamètre:" + feature.properties.diameter + "<br>Qualité:" + feature.properties.Qualite)
-			 layer.on('mouseover', function() { 
-			  ancien_layer=layer;
-			 layer.openPopup(); 
+				},
+					onEachFeature: function( feature, layer ){
+					layer.bindPopup( "Matériel: "+feature.properties.MATERIAU+ "<br>Diamètre:"+ feature.properties.DIAMETRE)
+						layer.on('mouseover', function() { 
+			    ancien_layer=layer;
+				layer.openPopup(); 
 				layer.setStyle({
 				color: '#666',
-            });		
-				});
-               layer.on('mouseout', function() { layer.closePopup();
-					layer.setStyle({
-				color: ancien_layer.options.style.color,
-            });
-	           				});
-            }
-        })
-
-         controlLayers.addOverlay(s_reseau1, 'Sous réseau1');
-		 //div.innerHTML += '<div id="sr1"><input type="checkbox" value=""onclick="activer(event,s_reseau1 )"><i style="background:' + 'blue' + '"></i> ' + 'sous réseau1<br></div>';
-
-    });
-    $.getJSON("donnes/Sous_reseau2.geojson", function(data) {
-        // add GeoJSON layer to the map once the file is loaded
-        s_reseau2 = L.geoJson(data, {
-            style: {
-                weight: 3,
-				opacity: 1,
-				color: 'green',
 				
-            },
-            onEachFeature: function(feature, layer) {
-                layer.bindPopup( feature.properties.location + "<br>Matériel:" + feature.properties.material + "<br>Diamètre:" + feature.properties.diameter + "<br>Qualité:" + feature.properties.Qualite)
-				layer.on('mouseover', function() { layer.openPopup(); 
-				 ancien_layer=layer;
-				layer.setStyle({
-				color: '#666',
             });		
 				});
                 layer.on('mouseout', function() { layer.closePopup();
-				layer.setStyle({
+					layer.setStyle({
 				color: ancien_layer.options.style.color,
             });
 				
-				
-				
 	           				});
-            }
-        })
+			
+					}
+				})
+			 map.fitBounds(reseau_p.getBounds());
+			controlLayers.addOverlay(reseau_p, 'Réseau principal');
+			
+			  });
+		
+	}
+		})(j);
 
-         controlLayers.addOverlay(s_reseau2, 'Sous réseau2');
-		// div.innerHTML += '<div id="sr2"><input type="checkbox" value=""onclick="activer(event,s_reseau2)"><i  style="background:' + 'green' + '"></i> ' + 'sous réseau2<br></div>';
-
-
-    });
-	
-
-
+}
+}
+});		  			  
 
     legend.onAdd = function(map) {
 		
@@ -293,30 +280,23 @@ function affichage_dynamique_diam(ev) {
 
             });
         });
-        s_reseau1.eachLayer(function(s_reseau1) {
-            diametreValue = s_reseau1.feature.properties.DIAMETRE;
+		for(var i= 0; i < s_reseau.length; i++)
+		{
+			var ss_reseau=s_reseau[i];
+        s_reseau[i].eachLayer(function(ss_reseau) {
+            diametreValue = ss_reseau.feature.properties.DIAMETRE;
 
             var diametre = getdiametre(diametreValue);
 
 
-            s_reseau1.setStyle({
+            ss_reseau.setStyle({
 
                 weight: diametre
 
             });
         });
-        s_reseau2.eachLayer(function(s_reseau2) {
-            diametreValue = s_reseau2.feature.properties.DIAMETRE;
+		}
 
-            var diametre = getdiametre(diametreValue);
-
-
-            s_reseau2.setStyle({
-
-                weight: diametre
-
-            });
-        });
 		coche_d = 0;
 		if(premiere){
 		//trier le tableau des diamètres
@@ -336,16 +316,14 @@ function affichage_dynamique_diam(ev) {
             weight: 2
 
         });
-        s_reseau1.setStyle({
+		for(var i= 0; i < s_reseau.length; i++){
+        s_reseau[i].setStyle({
 
             weight: 2
 
         });
-        s_reseau2.setStyle({
+		}
 
-            weight: 2
-
-        });
 		coche_d = 1;
 	 //enlever la legnende 
 	 document.getElementById('leg_diam').style.display="none";
@@ -387,48 +365,37 @@ var contains = function(needle) {
     return x - y;
 }
 //affichage dynamique selon la qualité
-function affichage_dynamique_qual(ev) {
-	
+function affichage_dynamique_qual(ev) {	
 	 if (coche_q == 1) {
 		 document.getElementById('leg_qual').style.display="block";
+		 for(var i= 0; i < s_reseau.length; i++){
+			 var ss_reseau=s_reseau[i];
 
-        s_reseau1.eachLayer(function(s_reseau1) {
-            qualiteValue = s_reseau1.feature.properties.Qualite;
+        ss_reseau.eachLayer(function(ss_reseau) {
+            qualiteValue = ss_reseau.feature.properties.Qualite;
 
             var dash = getdash(qualiteValue);
 
 
-            s_reseau1.setStyle({
+            ss_reseau.setStyle({
 
                 dashArray: dash
 
             });
         });
-		
-        s_reseau2.eachLayer(function(s_reseau2) {
-            qualiteValue = s_reseau2.feature.properties.Qualite;
+		 }
 
-            var dash = getdash(qualiteValue);
-
-            s_reseau2.setStyle({
-
-                dashArray: dash
-
-            });
-        });
 		 coche_q = 0;
     } else {
+		for(var i= 0; i < s_reseau.length; i++){
        
         s_reseau1.setStyle({
 
             dashArray: ''
 
         });
-        s_reseau2.setStyle({
+		}
 
-            dashArray: ''
-
-        });
         coche_q = 1;
    
 	 document.getElementById('leg_qual').style.display="none";
