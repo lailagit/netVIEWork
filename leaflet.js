@@ -6,14 +6,22 @@ Autheurs: KAICHOUH-ZAROUGUI-PETIT
 //déclaration des variables globales
 var layer;
 var reseau_p;
+var reseau=[];
 var s_reseau=[];
 var ancien_layer;
 var coche_d = 1;
 var coche_q = 1;
+var coche_sr = 1;
 var val_diam = [];
 var premiere=true;
+var legend;
+var map;
+var x=0;
+var div=document.getElementById('div');
+var titre_l=document.getElementById('titre_l');
+var couleurs = ['#046380','#21177D','#7E3300','#5A5E6B','#FCDC12','#DB0073'/* ,'','','','','','','','' */];
 //déclaration de la légende
-var div = L.DomUtil.create('div', 'info legend'); 
+ 
 var legend;
 window.onload = function() { //au chargement de la page
 
@@ -33,7 +41,7 @@ document.getElementById('leg_diam').innerHTML += '<div id="diam_l1">' + '<br><sp
     var n_layer;
     
 
-    var map = L.map("map", { //délclaration de la carte 
+   map = L.map("map", { //délclaration de la carte 
         center: new L.LatLng(49.1811, -0.3712),
         zoom: 16, //niveau de zoom initial
         fullscreenControl: true, //activer le mode plein ecran
@@ -79,9 +87,20 @@ document.getElementById('leg_diam').innerHTML += '<div id="diam_l1">' + '<br><sp
      
 //ajouter la legende
 
+
     legend = L.control({
         position: 'bottomright'
     });
+	legend.onAdd = function(map) {
+		
+	
+		titre_l.innerHTML += /* '<div>' + */ '<nav onclick="ouvrirFermerSpoiler(infoslegende)"> <span class="glyphicon glyphicon-chevron-up">'
+		+'</span>Légende</nav>'; 
+
+        return div;
+    };
+	legend.addTo(map);
+	/*
 	legend.onAdd = function(map) {
 		div.innerHTML += '<div>' + '<span id="titre_l">Légende</span><br></div>'; 
 		
@@ -95,7 +114,8 @@ document.getElementById('leg_diam').innerHTML += '<div id="diam_l1">' + '<br><sp
         return div;
     };
 	div.style.display = "block";
-	legend.addTo(map);
+	
+	*/
 	//	Récupérer tous les réseaux(fichiers.geojson) du chemain indiqué
 	var xhr = new XMLHttpRequest();
 
@@ -113,12 +133,13 @@ xhr.addEventListener('readystatechange',  function(e) {
 	(function(j){
 		var result = b[j].indexOf('Reseau_principal');
 		if (result == -1) {
-		var chemin = "donnes/" + b[j] + ".geojson";
+		var chemin = "donnees/" + b[j] + ".geojson";
+		var color=choisir_couleur();
 		//Récupérer le réseau et définir son style
 	   layer = $.getJSON(chemin, function(data) {
-		  reseau = L.geoJson(data, {
+		  reseau[j] = L.geoJson(data, {
 			 style: {
-				"color": "blue",
+				"color": color,
 				"weight": 3,
 				"opacity": 1
 			 },
@@ -149,12 +170,12 @@ xhr.addEventListener('readystatechange',  function(e) {
 
 			  })
 
-			  controlLayers.addOverlay(reseau, b[j]);
-			  s_reseau.push(reseau);
+			  infoslegende.innerHTML += '<div id="sr"><input class="cb" type="checkbox" value=""onclick="activer(event,reseau['+j+'] )"><i class="barrel" style="background:' + color + '"></i> ' + b[j]+'<br></div>';
+			  s_reseau.push(reseau[j]);
 		});
 	}else{
 		//chargement du réseau principal
-		layer=$.getJSON("donnes/Reseau_principal.geojson",function(data){
+		layer=$.getJSON("donnees/Reseau_principal.geojson",function(data){
 				// add GeoJSON layer to the map once the file is loaded
 				reseau_p=L.geoJson(data,{
 					style : {
@@ -185,7 +206,7 @@ xhr.addEventListener('readystatechange',  function(e) {
 				})
 			//zommer la carte sur le réseau principal
 			 map.fitBounds(reseau_p.getBounds());
-			controlLayers.addOverlay(reseau_p, 'Réseau principal');
+			 infoslegende.innerHTML += '<div id="rp"><input class="cb" type="checkbox" value=""onclick="activer(event,reseau_p )"><i class="barrel" style="background:' + '#FFA500' + '"></i> ' +b[j]+ '<br></div>';
 			
 			  });
 		
@@ -195,7 +216,7 @@ xhr.addEventListener('readystatechange',  function(e) {
 }
 }
 });		  			  
-
+/*
     legend.onAdd = function(map) {
 		
         if (n_layer == 1) {
@@ -245,15 +266,33 @@ xhr.addEventListener('readystatechange',  function(e) {
 			div.style.display = "none";
 		}
     });
-
+*/
 
 }
+
 //fonction d'activation des couches
 	
-	function activer(ev,couche) {
+	function activer (event,reseau)
+{
+	(function(ev,res)
+	{
 
+		 if (coche_sr == 1) {
+			
+		res.addTo(map);
+		 
+
+		 coche_sr = 0;
+    } else {
+	 
+      map.removeLayer(res);
+        coche_sr= 1;
+   
+	
+}
 		
-	}
+	})(event,reseau)
+}
 //fonction qui récupère les diamètres de tous les réseaux 
 function getdiametre(d) {
 	if(!contains.call(val_diam,d)&d!=null&d!=0)
@@ -432,6 +471,43 @@ function affichage_dynamique_qual(ev) {
 
 
 
+function choisir_couleur() 
+{
+	couleur=couleurs[x];
+	x++
+	return couleur;
+}
+
+function ouvrirFermerSpoiler(elem) {
+		if($(elem).attr('id')==="infoslegende" )
+		{
+			if(elem.style.display == 'none')
+			{
+				elem.style.display = 'block';
+				titre_l.innerHTML = /* '<div>' + */ '<nav onclick="ouvrirFermerSpoiler(infoslegende)"> <span class="glyphicon glyphicon-chevron-up">'
+				+'</span>Légende</nav>';
+			} 
+			else 
+			{
+            elem.style.display = 'none';
+			titre_l.innerHTML = /* '<div>' + */ '<nav onclick="ouvrirFermerSpoiler(infoslegende)"> <span class="glyphicon glyphicon-chevron-down">'
+			+'</span>Légende</nav>';
+			}
+		}
+		else
+		{
+			if(elem.style.display == 'none')
+			{
+            elem.style.display = 'block';
+			} 
+			else 
+			{
+			elem.style.display = 'none';
+			
+			}
+		}
+        
+    }
 
 
 

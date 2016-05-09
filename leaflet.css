@@ -7,11 +7,7 @@ margin-top:5px;
 position:relative;
 top:-40px;
 }
-.navbar{
-    background-color:# 231F20;
-    border-color: # 231F20;
-	height:15px;
-}
+
 .navbar-brand
 {
 	color:white;
@@ -82,12 +78,18 @@ height:100%;
 		.option{
 			position:relative;
 			left:300px;
-			top:20px;
+			top:-110px;
+			
 			
 		}
 		#leg_qual{
 			position:relative;
-			top:-50px;
+			top:-180px;
+			
+		}
+		#leg_diam{
+			position:relative;
+			top:-135px;
 			
 		}
 		#text_option1{
@@ -103,7 +105,40 @@ height:100%;
 		.btn{
 			position:relative;
 			left:85%;
-			top:-120px;
+			top:-30px;
 			
 		}
+		#c{
+			text-align:center;
+			position:relative;
+			top:-190px;
+			
+		}
+		.affichage{
+		position:relative;
+		top:-130px;	
+		left:10px;
+			
+		}
+		#che_d{
+		position:relative;
+		top:-130px;	
+			
+		}
+		i.barrel{
+		position: relative;
+		left: 20px;
+		}
+		input.cb{
+		position:relative;
+		right: 22px}
+		
+		span.glyphicon
+		{	
+		cursor : pointer;
+		position:relative;
+		right: 8px
+		
+		}
+		
 		
