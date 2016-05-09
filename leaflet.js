@@ -33,7 +33,7 @@ document.getElementById('text_q').style.fontWeight="bold";
 document.getElementById('text_d').style.fontWeight="bold";	 
 //définir la légende de qualité
 document.getElementById('leg_qual').innerHTML += '<div>' + '<br><span id="titre">Niveau de qualité</span><br></div>'; 
-document.getElementById('leg_qual').innerHTML += '<div><i style="background:' + 'black' + '"></i> ' + 'Bonne<br></div>';
+document.getElementById('leg_qual').innerHTML += '<div><i class="back_leg" style="background:' + 'black' + '"></i> ' + '&nbsp;Bonne<br></div>';
 document.getElementById('leg_qual').innerHTML += '<div><i id="dash"></i> ' + 'Avec défaut<br></div>';
 //définir la légende de qualité
 document.getElementById('leg_diam').innerHTML += '<div id="diam_l1">' + '<br><span id="titre">Diamètre</span><br></div>'; 
@@ -154,7 +154,7 @@ xhr.addEventListener('readystatechange',  function(e) {
 
 			  })
 
-			  infoslegende.innerHTML += '<div id="sr"><input class="cb" id='+j+' type="checkbox" value=""onclick="activer(event,reseau['+j+'],'+j+' )"><i class="barrel" style="background:' + color + '"></i> ' + b[j]+'<br></div>';
+			  infoslegende.innerHTML += '<div id="sr"><input class="cb" id='+j+' type="checkbox" value=""onclick="activer(event,reseau['+j+'],'+j+' )"><i class="barrel" style="background:' + color + '"></i> <span class="l_text">' + b[j]+'</span><br></div>';
 			  s_reseau.push(reseau[j]);
 		});
 	}else{
@@ -190,7 +190,7 @@ xhr.addEventListener('readystatechange',  function(e) {
 				})
 			//zommer la carte sur le réseau principal
 			 map.fitBounds(reseau_p.getBounds());
-			 infoslegende.innerHTML += '<div id="rp"><input class="cb" id='+j+' type="checkbox" value=""onclick="activer(event,reseau_p,'+j+'  )"><i class="barrel" style="background:' + '#FFA500' + '"></i> ' +b[j]+ '<br></div>';
+			 infoslegende.innerHTML += '<div id="rp"><input class="cb" id='+j+' type="checkbox" value=""onclick="activer(event,reseau_p,'+j+'  )"><i  class="barrel" style="background:' + '#FFA500' + '"></i><span class="l_text"> ' +b[j]+ '</span><br></div>';
 			
 			  });
 		
@@ -293,7 +293,7 @@ function affichage_dynamique_diam(ev) {
 		for(var i= 0; i < val_diam.length; i++)
 	{
 		//afficher les diamètres dans la légende
-		 document.getElementById('leg_diam').innerHTML += '<div><i style="background:' + 'black;height:'+val_diam[i]/100+'px'+'"></i> ' + 'Diamètre:'+val_diam[i]+'m<br></div>';
+		 document.getElementById('leg_diam').innerHTML += '<div><i class="back_leg" style="background:' + 'black;height:'+val_diam[i]/100+'px'+'"></i> ' + '&nbsp;Diamètre:'+val_diam[i]+'m<br></div>';
 	}
 		}
 		premiere=false;
