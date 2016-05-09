@@ -25,29 +25,24 @@
 </head>
 
 <body>
-    <!-- Navigation -->
-<!--nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-  <div class="container-fluid">
-   
-    <ul class="nav navbar-nav navbar-left" id="user">
-      <li><span class="glyphicon glyphicon-user"></span> Jaques Dupond</li>
-      <li><span class="glyphicon glyphicon-remove"></span></li>
-    </ul>
-  </div>
-</nav>
-<img src="logo.png" width="180" height="100">
 
 
      <!--Carte-->
+	 <img id="im"src="banniere.JPG" style="width:100%;height:85px;">
 	 
      <div id="map"></div>
-	 <div id="images">
 	  <div class="checkbox">
-  <label><input type="checkbox" value=""onclick="affichage_dynamique_qual(event)">Qualité</label>
+  <label><input type="checkbox" value=""onclick="affichage_dynamique_qual(event)" id="qual"><span id="text_q" >Qualité</span></label>
+</div>
+	  <div class="checkbox option" id="option_q1">
+  <label><input type="checkbox" value="" >Afficher les sous réseaux de<span id="text_option1"> bonne </span>qualité</label>
+</div>
+	  <div class="checkbox option" id="option_q2">
+  <label><input type="checkbox" value="" >Afficher les sous réseaux  <span id="text_option2" >avec défaut</span></label>
 </div>
 <div class="info legend" id="leg_qual"></div><br>
-	  <div class="checkbox">
-  <label><input type="checkbox" value=""onclick="affichage_dynamique_diam(event)">Diamètre</label>
+	  <div class="checkbox" >
+  <label><input type="checkbox" value=""onclick="affichage_dynamique_diam(event)" id="diam"><span id="text_d">Diamètre</span></label>
 </div>
 <div class="info legend" id="leg_diam"></div><br>
 

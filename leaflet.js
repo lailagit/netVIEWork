@@ -19,7 +19,11 @@ window.onload = function() { //au chargement de la page
 
 //ne pas afficher la légende du diamètre et de qualité au chargement de la page
 document.getElementById('leg_diam').style.display="none";
-document.getElementById('leg_qual').style.display="none";	 
+document.getElementById('leg_qual').style.display="none";
+document.getElementById('option_q1').style.display="none";	
+document.getElementById('option_q2').style.display="none";	
+document.getElementById('text_q').style.fontWeight="bold";
+document.getElementById('text_d').style.fontWeight="bold";	 
 //définir la légende de qualité
 document.getElementById('leg_qual').innerHTML += '<div>' + '<br><span id="titre">Niveau de qualité</span><br></div>'; 
 document.getElementById('leg_qual').innerHTML += '<div><i style="background:' + 'black' + '"></i> ' + 'Bonne<br></div>';
@@ -62,13 +66,14 @@ document.getElementById('leg_diam').innerHTML += '<div id="diam_l1">' + '<br><sp
 
     
     carte.addTo(map);//la carte de base comme vue initiale
+    //définir les couches de bases
     var baseLayers = {
         "fond de carte": carte,
         "orthophoto": ortho,
         'sans fond': L.tileLayer(''),
     };
 
-    //définir les couches de bases
+    //ajout des couches de base à la carte
 	
     var controlLayers = L.control.layers(baseLayers).addTo(map);
      
@@ -91,14 +96,15 @@ document.getElementById('leg_diam').innerHTML += '<div id="diam_l1">' + '<br><sp
     };
 	div.style.display = "block";
 	legend.addTo(map);
+	//	Récupérer tous les réseaux(fichiers.geojson) du chemain indiqué
 	var xhr = new XMLHttpRequest();
 
-xhr.open("GET","test.php", true);
-//console.log('1');
+xhr.open("GET","fichiers.php", true);
+
 xhr.send();
 xhr.addEventListener('readystatechange',  function(e) {
 		if(xhr.readyState == 4 && xhr.status == 200) 
-		{ //console.log('rah la requete kheddamaaa');
+		{
 	   b= JSON.parse(xhr.responseText);
 
 	
@@ -108,7 +114,7 @@ xhr.addEventListener('readystatechange',  function(e) {
 		var result = b[j].indexOf('Reseau_principal');
 		if (result == -1) {
 		var chemin = "donnes/" + b[j] + ".geojson";
-
+		//Récupérer le réseau et définir son style
 	   layer = $.getJSON(chemin, function(data) {
 		  reseau = L.geoJson(data, {
 			 style: {
@@ -119,6 +125,7 @@ xhr.addEventListener('readystatechange',  function(e) {
 
 
 			 onEachFeature: function(feature, layer) {
+				 //afficher les poup au survol des tronçons du réseau
 					layer.bindPopup("Location: "+feature.properties.location+ "<br>Matériel:"+ feature.properties.material+ "<br>Diamètre:"+ feature.properties.diameter+ "<br>Qualité:"+ feature.properties.Qualite)
 				 	layer.on('mouseover', function() { 
 			    ancien_layer=layer;
@@ -146,7 +153,7 @@ xhr.addEventListener('readystatechange',  function(e) {
 			  s_reseau.push(reseau);
 		});
 	}else{
-		
+		//chargement du réseau principal
 		layer=$.getJSON("donnes/Reseau_principal.geojson",function(data){
 				// add GeoJSON layer to the map once the file is loaded
 				reseau_p=L.geoJson(data,{
@@ -176,6 +183,7 @@ xhr.addEventListener('readystatechange',  function(e) {
 			
 					}
 				})
+			//zommer la carte sur le réseau principal
 			 map.fitBounds(reseau_p.getBounds());
 			controlLayers.addOverlay(reseau_p, 'Réseau principal');
 			
@@ -246,16 +254,17 @@ xhr.addEventListener('readystatechange',  function(e) {
 
 		
 	}
-
+//fonction qui récupère les diamètres de tous les réseaux 
 function getdiametre(d) {
 	if(!contains.call(val_diam,d)&d!=null&d!=0)
 	{
+		//récupérer tous les diamètres dans un tableau val_diam
 		val_diam.push(d);
 	}
         return d/100;
 
 }
-
+//fonction qui retourne le style de trait selon la qualité du tronçon
 function getdash(q) {
     if (q=="Bonne") return '';
 	
@@ -263,11 +272,18 @@ function getdash(q) {
 
 }
 
-//affichage dynamique selon le diamètre
+//affichage dynamique selon le diamètre 
 function affichage_dynamique_diam(ev) {
+	
 
-    if (coche_d == 1) {
-		document.getElementById('leg_diam').style.display="block";	
+    if (coche_d == 1) {//lors de l'activation du checkbox diamètre
+		if(document.getElementById('qual').checked ) {
+		document.getElementById('text_d').style.color="black";
+		document.getElementById('text_q').style.color="black";
+		}
+       else  document.getElementById('text_q').style.color="#808080";		
+		document.getElementById('leg_diam').style.display="block";
+       	 		
         reseau_p.eachLayer(function(reseau_p) {
             diametreValue = reseau_p.feature.properties.DIAMETRE;
 
@@ -304,7 +320,6 @@ function affichage_dynamique_diam(ev) {
 		
 		for(var i= 0; i < val_diam.length; i++)
 	{
-		console.log(val_diam[i]);
 		//afficher les diamètres dans la légende
 		 document.getElementById('leg_diam').innerHTML += '<div><i style="background:' + 'black;height:'+val_diam[i]/100+'px'+'"></i> ' + 'Diamètre:'+val_diam[i]+'m<br></div>';
 	}
@@ -327,6 +342,8 @@ function affichage_dynamique_diam(ev) {
 		coche_d = 1;
 	 //enlever la legnende 
 	 document.getElementById('leg_diam').style.display="none";
+	 if(document.getElementById('qual').checked ) document.getElementById('text_d').style.color="#808080";
+	 else document.getElementById('text_q').style.color="black";	
 
     }
     
@@ -367,7 +384,13 @@ var contains = function(needle) {
 //affichage dynamique selon la qualité
 function affichage_dynamique_qual(ev) {	
 	 if (coche_q == 1) {
+		 if(document.getElementById('diam').checked ) {document.getElementById('text_q').style.color="black";	
+		 document.getElementById('text_d').style.color="black";	
+		 }
+		 else document.getElementById('text_d').style.color="#808080";
 		 document.getElementById('leg_qual').style.display="block";
+		 document.getElementById('option_q1').style.display="block";	
+         document.getElementById('option_q2').style.display="block";			 
 		 for(var i= 0; i < s_reseau.length; i++){
 			 var ss_reseau=s_reseau[i];
 
@@ -389,7 +412,7 @@ function affichage_dynamique_qual(ev) {
     } else {
 		for(var i= 0; i < s_reseau.length; i++){
        
-        s_reseau1.setStyle({
+        s_reseau[i].setStyle({
 
             dashArray: ''
 
@@ -399,7 +422,10 @@ function affichage_dynamique_qual(ev) {
         coche_q = 1;
    
 	 document.getElementById('leg_qual').style.display="none";
-	
+	 document.getElementById('option_q1').style.display="none";	
+     document.getElementById('option_q2').style.display="none";	
+	 if(document.getElementById('diam').checked ) document.getElementById('text_q').style.color="#808080";
+	 else document.getElementById('text_d').style.color="black";	
 }
 }
 

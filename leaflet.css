@@ -1,9 +1,11 @@
 #map 
 { 
-height: 780px;
-width:880px; 
+height:420px;
+width:95%; 
 margin-left:15px;
-margin-top:15px;
+margin-top:5px;
+position:relative;
+top:-40px;
 }
 .navbar{
     background-color:# 231F20;
@@ -44,6 +46,7 @@ height:100%;
 			text-align: left;
 			line-height: 18px;
 			color: #555;
+			
 		}
 		.legend i {
 			width: 18px;
@@ -72,11 +75,35 @@ height:100%;
 			margin-left: 20px;
 			font-weight:bold;
 			font-size:18px;
-			text-align;center;
+			text-align:center;
 			
 		}
-		#diam{
-			height: 5px;
+
+		.option{
+			position:relative;
+			left:300px;
+			top:20px;
 			
 		}
-	
+		#leg_qual{
+			position:relative;
+			top:-50px;
+			
+		}
+		#text_option1{
+			color:green;
+		}
+		#text_option2{
+			color:red;
+		}
+		#im{
+			position:relative;
+			top:-50px;
+		}
+		.btn{
+			position:relative;
+			left:85%;
+			top:-120px;
+			
+		}
+		
