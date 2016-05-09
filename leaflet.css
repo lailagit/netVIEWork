@@ -8,10 +8,7 @@ position:relative;
 top:-40px;
 }
 
-.navbar-brand
-{
-	color:white;
-}
+
 #user{
 	margin-top:10px;
 }
@@ -35,14 +32,14 @@ height:100%;
 			background: rgba(255,255,255,0.8);
 			box-shadow: 0 0 15px rgba(0,0,0,0.2);
 			border-radius: 5px;
-			width: 150px;
 		}
+		
+
 
 		.legend {
 			text-align: left;
 			line-height: 18px;
 			color: #555;
-			
 		}
 		.legend i {
 			width: 18px;

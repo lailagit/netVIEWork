@@ -11,7 +11,6 @@ var s_reseau=[];
 var ancien_layer;
 var coche_d = 1;
 var coche_q = 1;
-var coche_sr = 1;
 var val_diam = [];
 var premiere=true;
 var legend;
@@ -100,22 +99,7 @@ document.getElementById('leg_diam').innerHTML += '<div id="diam_l1">' + '<br><sp
         return div;
     };
 	legend.addTo(map);
-	/*
-	legend.onAdd = function(map) {
-		div.innerHTML += '<div>' + '<span id="titre_l">Légende</span><br></div>'; 
-		
-        if (n_layer == 1) {
-			reseau_p.bringToBack();
-            div.innerHTML += '<div id="rp"><i style="background:' + '#FFA500' + '"></i> ' + 'réseau principal<br></div>';
-        } else if (n_layer == 2) {
-            div.innerHTML += '<div id="sr1"><i style="background:' + 'blue' + '"></i> ' + 'sous réseau1<br></div>';
-        } else if(n_layer == 3) div.innerHTML += '<div id="sr2"><i  style="background:' + 'green' + '"></i> ' + 'sous réseau2<br></div>';
 
-        return div;
-    };
-	div.style.display = "block";
-	
-	*/
 	//	Récupérer tous les réseaux(fichiers.geojson) du chemain indiqué
 	var xhr = new XMLHttpRequest();
 
@@ -170,7 +154,7 @@ xhr.addEventListener('readystatechange',  function(e) {
 
 			  })
 
-			  infoslegende.innerHTML += '<div id="sr"><input class="cb" type="checkbox" value=""onclick="activer(event,reseau['+j+'] )"><i class="barrel" style="background:' + color + '"></i> ' + b[j]+'<br></div>';
+			  infoslegende.innerHTML += '<div id="sr"><input class="cb" id='+j+' type="checkbox" value=""onclick="activer(event,reseau['+j+'],'+j+' )"><i class="barrel" style="background:' + color + '"></i> ' + b[j]+'<br></div>';
 			  s_reseau.push(reseau[j]);
 		});
 	}else{
@@ -206,7 +190,7 @@ xhr.addEventListener('readystatechange',  function(e) {
 				})
 			//zommer la carte sur le réseau principal
 			 map.fitBounds(reseau_p.getBounds());
-			 infoslegende.innerHTML += '<div id="rp"><input class="cb" type="checkbox" value=""onclick="activer(event,reseau_p )"><i class="barrel" style="background:' + '#FFA500' + '"></i> ' +b[j]+ '<br></div>';
+			 infoslegende.innerHTML += '<div id="rp"><input class="cb" id='+j+' type="checkbox" value=""onclick="activer(event,reseau_p,'+j+'  )"><i class="barrel" style="background:' + '#FFA500' + '"></i> ' +b[j]+ '<br></div>';
 			
 			  });
 		
@@ -216,78 +200,27 @@ xhr.addEventListener('readystatechange',  function(e) {
 }
 }
 });		  			  
-/*
-    legend.onAdd = function(map) {
-		
-        if (n_layer == 1) {
-			reseau_p.bringToBack();
-            div.innerHTML += '<div id="rp"><i style="background:' + '#FFA500' + '"></i> ' + 'réseau principal<br></div>';
-        } else if (n_layer == 2) {
-            div.innerHTML += '<div id="sr1"><i style="background:' + 'blue' + '"></i> ' + 'sous réseau1<br></div>';
-        } else if(n_layer == 3) div.innerHTML += '<div id="sr2"><i  style="background:' + 'green' + '"></i> ' + 'sous réseau2<br></div>';
 
-        return div;
-    };
-
-    
-
-    map.on('overlayadd', function(eventLayer) {
-		
-
-        if (eventLayer.name === 'Réseau principal') {
-
-            n_layer = 1;
-            legend.addTo(this);
-        } else if (eventLayer.name === 'Sous réseau1') {
-            n_layer = 2;
-            legend.addTo(this);
-        } else {
-            n_layer = 3;
-            legend.addTo(this);
-        }
-    });
-    map.on('overlayremove', function(eventLayer) {
-		
-
-        if (eventLayer.name === 'Réseau principal') {
-            var rp = document.getElementById("rp");
-            div.removeChild(rp);
-
-        } else if (eventLayer.name === 'Sous réseau1') {
-            var sr1 = document.getElementById("sr1");
-            div.removeChild(sr1);
-
-        } else {
-            var sr2 = document.getElementById("sr2");
-            div.removeChild(sr2);
-
-        }
-        if(div.childNodes[0]==null) {//désactiver la légende en cas de non activation des réseaux
-			div.style.display = "none";
-		}
-    });
-*/
 
 }
 
 //fonction d'activation des couches
 	
-	function activer (event,reseau)
+	function activer (event,reseau,j)
 {
+	
 	(function(ev,res)
 	{
 
-		 if (coche_sr == 1) {
+		 if ( document.getElementById(j).checked ) {
 			
 		res.addTo(map);
-		 
+		if(res==reseau_p) reseau_p.bringToBack();
 
-		 coche_sr = 0;
     } else {
 	 
       map.removeLayer(res);
-        coche_sr= 1;
-   
+     
 	
 }
 		
