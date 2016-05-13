@@ -1,0 +1,12 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                                                                                                                  
+"features": [
+{ "type": "Feature", "properties": { "id": "40312 ==> 42911", "location": "Rue Jules Verne", "diameter": "200", "material": "Autre", "Qualite": "Bonne" }, "geometry": { "type": "LineString", "coordinates": [ [ -0.36199881890701, 49.198437689797949 ], [ -0.36219681778833, 49.198434397416399 ], [ -0.362275664120505, 49.198433086242176 ] ] } },
+{ "type": "Feature", "properties": { "id": "40312 ==> 40311", "location": "Rue Jules Verne", "diameter": "200", "material": "Autre", "Qualite": "Bonne" }, "geometry": { "type": "LineString", "coordinates": [ [ -0.362275664120505, 49.198433086242176 ], [ -0.362613225168436, 49.198429518774617 ], [ -0.362798518720442, 49.198427560103653 ], [ -0.362887807204318, 49.198426616160788 ] ] } },
+{ "type": "Feature", "properties": { "id": "40311 ==> 40310", "location": "Rue Jules Verne", "diameter": "200", "material": "Autre", "Qualite": "Bonne" }, "geometry": { "type": "LineString", "coordinates": [ [ -0.362887807204318, 49.198426616160788 ], [ -0.363159104575072, 49.198424267838533 ], [ -0.363244853305464, 49.198423525473103 ], [ -0.363503925884329, 49.198421282176405 ] ] } },
+{ "type": "Feature", "properties": { "id": "40310 ==> 40309", "location": "Rue Jules Verne", "diameter": "200", "material": "Autre", "Qualite": "Bonne" }, "geometry": { "type": "LineString", "coordinates": [ [ -0.363503925884329, 49.198421282176405 ], [ -0.363732268382269, 49.198418624693609 ], [ -0.364121439861455, 49.198414094414275 ] ] } },
+{ "type": "Feature", "properties": { "id": "46553 ==> 46552", "location": "Rue Jules Verne", "diameter": "200", "material": "Fonte", "Qualite": "Bonne" }, "geometry": { "type": "LineString", "coordinates": [ [ -0.36185522524614, 49.198494333792631 ], [ -0.361840446593823, 49.198336763934719 ] ] } }
+]
+}
