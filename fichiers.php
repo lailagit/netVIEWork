@@ -1,6 +1,6 @@
 <?php
 $nomsFichiers= array();
-$dir = "donnes";
+$dir = "donnees";
 //  si le dossier pointe existe
 if (is_dir($dir)) {
 
@@ -24,7 +24,7 @@ if (is_dir($dir)) {
    }
 }
 
-/* $dir='donnes';
+/* $dir='donnees';
 $fichiers= scandir($dir ); */
 $envoi = json_encode($nomsFichiers);
 echo $envoi;
