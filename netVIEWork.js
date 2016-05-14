@@ -1,7 +1,7 @@
 /*
 Nom de l'application: netVIEWork
-Description: affichage dynamique des réseaux enterés
-Autheurs: KAICHOUH-ZAROUGUI-PETIT
+Description: affichage dynamique des réseaux enterrés
+Auteurs: KAICHOUH-ZAROUGUI-PETIT
 */
 //déclaration des variables globales
 var layer;
