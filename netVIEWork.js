@@ -291,7 +291,7 @@ function affichage_dynamique_diam(ev) {
 
             for (var i = 0; i < val_diam.length; i++) {
                 //afficher les diamètres dans la légende
-                document.getElementById('leg_diam').innerHTML += '<div><i class="back_leg" style="background:' + 'black;height:' + val_diam[i] / 100 + 'px' + '"></i> ' + '&nbsp;Diamètre:' + val_diam[i] + 'm<br></div>';
+                document.getElementById('leg_diam').innerHTML += '<div><i class="back_leg" style="background:' + 'black;height:' + val_diam[i] / 100 + 'px' + '"></i> ' + '&nbsp;Diamètre:' + val_diam[i] + 'mm<br></div>';
             }
         }
         premiere = false;
