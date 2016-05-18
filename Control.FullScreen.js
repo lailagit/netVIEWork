@@ -69,6 +69,8 @@ L.Control.FullScreen = L.Control.extend({
 			map.fire('exitFullscreen');
 			map._exitFired = true;
 			map._isFullscreen = false;
+		    $('.leaflet-control-zoom').css({ 'position': 'relative', 'top': '-6px'});
+			$('.leaflet-control-layers').css({ 'position': 'relative', 'top': '-6px'});
 		}
 		else {
 			if (fullScreenApi.supportsFullScreen && !this.options.forcePseudoFullscreen) {
@@ -79,6 +81,8 @@ L.Control.FullScreen = L.Control.extend({
 			map.invalidateSize();
 			map.fire('enterFullscreen');
 			map._isFullscreen = true;
+			$('.leaflet-control-zoom').css({ 'position': 'relative', 'top': '26px'});
+			$('.leaflet-control-layers').css({ 'position': 'relative', 'top': '26px'});
 		}
 	},
 	
@@ -92,7 +96,8 @@ L.Control.FullScreen = L.Control.extend({
 			map.fire('exitFullscreen');
 			map._exitFired = true;
 			map._isFullscreen = false;
-		}
+		
+			}
 	}
 });
 
