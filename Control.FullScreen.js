@@ -96,6 +96,8 @@ L.Control.FullScreen = L.Control.extend({
 			map.fire('exitFullscreen');
 			map._exitFired = true;
 			map._isFullscreen = false;
+			$('.leaflet-control-zoom').css({ 'position': 'relative', 'top': '-6px'});
+			$('.leaflet-control-layers').css({ 'position': 'relative', 'top': '-6px'});
 		
 			}
 	}
