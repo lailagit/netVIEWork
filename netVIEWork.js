@@ -132,8 +132,8 @@ window.onload = function() { //au chargement de la page
 
                                 onEachFeature: function(feature, layer) {
                                     //afficher les poup au survol des tronçons du sous réseau
-                                    layer.bindPopup("Location: " + feature.properties.location + "<br>Matériel:" + feature.properties.material + "<br>Diamètre:" + feature.properties.diameter + "<br>Qualité:" + feature.properties.Qualite)
-                                    layer.on('mouseover', function() {
+                                    layer.bindPopup("Location: " + feature.properties.location + "<br>Matériel:" + feature.properties.material + "<br>Diamètre:" + feature.properties.diameter + "<br>Qualité:" + feature.properties.Qualite,{offset: new L.Point(e.latlng)})
+                                    layer.on('mouseover', function(e) {
                                         ancien_layer = layer;
                                         layer.openPopup();
                                         layer.setStyle({
@@ -173,9 +173,9 @@ window.onload = function() { //au chargement de la page
                                     },
 									 //afficher les poup au survol des tronçons du réseau
                                     onEachFeature: function(feature, layer) {
-                                        layer.bindPopup("Matériel: " + feature.properties.MATERIAU + "<br>Diamètre:" + feature.properties.DIAMETRE)
-                                        layer.on('mouseover', function() {
-                                            ancien_layer = layer;
+                                        layer.bindPopup("Matériel: " + feature.properties.MATERIAU + "<br>Diamètre:" + feature.properties.DIAMETRE,{offset: new L.Point(-7,0)});
+                                        layer.on('mouseover', function(e) {
+                                            ancien_layer = layer;							
                                             layer.openPopup();
                                             layer.setStyle({
                                                 color: '#666',
